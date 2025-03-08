@@ -1,7 +1,6 @@
 package com.dionext.ai.utils;
 
 import com.dionext.ai.entity.AiLogInfo;
-import com.dionext.ai.entity.AiPrompt;
 import com.dionext.ai.entity.AiRequest;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.client.advisor.api.*;
@@ -17,12 +16,12 @@ import java.util.List;
 
 public class DbLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
 
-    private AiPrompt aiPrompt = null;
+    //private AiPrompt aiPrompt = null;
     private AiRequest aiRequest = null;
 
     private long startTime = 0;
     public DbLoggerAdvisor(AiLogInfo aiLogInfo){
-        this.aiPrompt = aiLogInfo.aiPrompt();
+        //this.aiPrompt = aiLogInfo.aiPrompt();
         this.aiRequest = aiLogInfo.aiRequest();
     }
 

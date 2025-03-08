@@ -6,7 +6,6 @@ import com.dionext.ai.repositories.AiPromptRepository;
 import com.dionext.ai.repositories.AiRequestRepository;
 import jakarta.annotation.PostConstruct;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.openai.OpenAiChatModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -261,7 +260,7 @@ public class AIRequestService {
     public void postProccessAiLogInfo(AiLogInfo aiLogInfo) {
         AiModel aiModel = aiLogInfo.aiModel();
         AiRequest aiRequest = aiLogInfo.aiRequest();
-        AiPrompt aiPrompt = aiLogInfo.aiPrompt();
+        //AiPrompt aiPrompt = aiLogInfo.aiPrompt();
 
         double cost = calculateCost(aiModel, aiRequest);
         aiRequest.setCost(BigDecimal.valueOf(cost));
