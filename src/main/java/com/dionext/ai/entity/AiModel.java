@@ -11,13 +11,26 @@ import java.math.BigDecimal;
 @Entity
 public class AiModel {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    //@GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(columnDefinition="TEXT")
     private String provider;
     @Column(columnDefinition="TEXT")
+    private String providerUrl;
+    @Column(columnDefinition="TEXT")
     private String model;
+    @Column(columnDefinition="TEXT")
+    private String modelUrl;
+    @Column
+    @Enumerated(EnumType.STRING)
+    private AiLaunchType launchType = AiLaunchType.PROVIDER;
+    @Column(columnDefinition="TEXT")
+    private String broker;
+    @Column(columnDefinition="TEXT")
+    private String brokerUrl;
+    @Column(columnDefinition="TEXT")
+    private String chatClientBean;
 
     //Price per 1M tokens
     @Column(precision = 40, scale = 20)

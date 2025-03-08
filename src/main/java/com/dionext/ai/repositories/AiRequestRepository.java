@@ -8,4 +8,6 @@ import java.util.Collection;
 public interface AiRequestRepository extends JpaRepository<AiRequest, Long> {
     Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariantAndExternalId(
             String externalDomain, String externalEntity, String externalVariant, String externalId);
+    Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariantAndExternalIdAndAiModelIdAndAiPromptId(
+            String externalDomain, String externalEntity, String externalVariant, String externalId, Long aiModelId, Long aiPromptId);
 }

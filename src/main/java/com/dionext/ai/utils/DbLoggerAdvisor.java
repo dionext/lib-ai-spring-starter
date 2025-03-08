@@ -69,11 +69,11 @@ public class DbLoggerAdvisor implements CallAroundAdvisor, StreamAroundAdvisor {
 
     private void observeAfter(AdvisedResponse advisedResponse) {
         ChatResponse chatResponse = advisedResponse.response();
-        aiRequest.setResult(chatResponse.getResult().getOutput().getContent());
+        aiRequest.setResult(chatResponse.getResult().getOutput().getText());
         aiRequest.setDateTime(LocalDateTime.now());
         aiRequest.setDuration(System.currentTimeMillis() - startTime);
-        aiRequest.setPromptTokens(chatResponse.getMetadata().getUsage().getPromptTokens());
-        aiRequest.setGenerationTokens(chatResponse.getMetadata().getUsage().getGenerationTokens());
+        aiRequest.setPromptTokens(chatResponse.getMetadata().getUsage().getPromptTokens().longValue());
+        aiRequest.setCompletionTokens(Long.valueOf(chatResponse.getMetadata().getUsage().getCompletionTokens()));
     }
 
     public String toString() {

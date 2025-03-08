@@ -36,7 +36,8 @@ public class AiRequest {
     private Long duration; //ms
     private LocalDateTime dateTime;
     private Long promptTokens;
-    private Long generationTokens;
+    private Long completionTokens;
+    private Long totalTokens;
     @Column(precision = 40, scale = 20)
     private BigDecimal cost;
 }

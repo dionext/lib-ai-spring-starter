@@ -8,5 +8,5 @@ import java.util.Collection;
 import java.util.Optional;
 
 public interface AiPromptRepository extends JpaRepository<AiPrompt, Long> {
-    Optional<AiPrompt> findByName(String name);
+    //Optional<AiPrompt> findByName(String name);
 }
