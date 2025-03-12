@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Entity
+@Table(name = "aiprompt")
 public class AiPrompt {
     public static double DEFAULT_TEMPERATURE = 0.8;
 

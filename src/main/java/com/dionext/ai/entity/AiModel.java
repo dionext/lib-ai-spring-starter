@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
+@Table(name = "aimodel")
 public class AiModel {
     @Id
     //@GeneratedValue(strategy = GenerationType.IDENTITY)

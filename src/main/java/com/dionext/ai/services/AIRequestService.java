@@ -206,6 +206,10 @@ public class AIRequestService {
         }
 
     }
+    public Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariant(String externalDomain, String externalEntity, String externalVariant) {
+        return aiRequestRepository.findByExternalDomainAndExternalEntityAndExternalVariant(
+                externalDomain, externalEntity, externalVariant);
+    }
     public Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariantAndExternalId(String externalDomain, String externalEntity, String externalVariant, String externalId) {
         return aiRequestRepository.findByExternalDomainAndExternalEntityAndExternalVariantAndExternalId(
                 externalDomain, externalEntity, externalVariant, externalId);
