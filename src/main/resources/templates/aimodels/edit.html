@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout/main :: layout(~{::title}, ~{::section})}">
+<head>
+    <title th:text="${aiModel.id == null ? 'Create AI Model' : 'Edit AI Model'} + ' - DioNext Admin'">Create/Edit AI Model</title>
+</head>
+<body>
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 th:text="${aiModel.id == null ? 'Create AI Model' : 'Edit AI Model'}">Create/Edit AI Model</h2>
+            <a th:href="@{/aimodels}" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+
+        <form th:action="@{/aimodels}" th:object="${aiModel}" method="post" class="needs-validation" novalidate>
+            <input type="hidden" th:field="*{id}" />
+            
+            <div class="row">
+                <!-- Provider Information -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">Provider Information</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="provider">Provider</label>
+                                <input type="text" class="form-control" th:field="*{provider}" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('provider')}" th:errors="*{provider}">
+                                    Please provide a valid provider.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="providerUrl">Provider URL</label>
+                                <input type="text" class="form-control" th:field="*{providerUrl}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('providerUrl')}" th:errors="*{providerUrl}">
+                                    Please provide a valid provider URL.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Model Information -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">Model Information</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="model">Model Name</label>
+                                <input type="text" class="form-control" th:field="*{model}" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('model')}" th:errors="*{model}">
+                                    Please provide a valid model name.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="modelUrl">Model URL</label>
+                                <input type="text" class="form-control" th:field="*{modelUrl}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('modelUrl')}" th:errors="*{modelUrl}">
+                                    Please provide a valid model URL.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Launch Configuration -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">Launch Configuration</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="launchType">Launch Type</label>
+                                <select class="form-control" th:field="*{launchType}" required>
+                                    <option th:each="type : ${launchTypes}"
+                                            th:value="${type}"
+                                            th:text="${type}">PROVIDER</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('launchType')}" th:errors="*{launchType}">
+                                    Please select a launch type.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="broker">Broker</label>
+                                <input type="text" class="form-control" th:field="*{broker}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('broker')}" th:errors="*{broker}">
+                                    Please provide a valid broker.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="brokerUrl">Broker URL</label>
+                                <input type="text" class="form-control" th:field="*{brokerUrl}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('brokerUrl')}" th:errors="*{brokerUrl}">
+                                    Please provide a valid broker URL.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="chatClientBean">Chat Client Bean</label>
+                                <input type="text" class="form-control" th:field="*{chatClientBean}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('chatClientBean')}" th:errors="*{chatClientBean}">
+                                    Please provide a valid chat client bean.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pricing Information -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">Pricing Information (per 1M tokens)</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <label for="pricePer1MInput">Input Price</label>
+                                <input type="number" class="form-control" th:field="*{pricePer1MInput}" step="0.000001">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('pricePer1MInput')}" th:errors="*{pricePer1MInput}">
+                                    Please provide a valid input price.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pricePer1MOutput">Output Price</label>
+                                <input type="number" class="form-control" th:field="*{pricePer1MOutput}" step="0.000001">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('pricePer1MOutput')}" th:errors="*{pricePer1MOutput}">
+                                    Please provide a valid output price.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pricePer1MAll">Combined Price</label>
+                                <input type="number" class="form-control" th:field="*{pricePer1MAll}" step="0.000001">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('pricePer1MAll')}" th:errors="*{pricePer1MAll}">
+                                    Please provide a valid combined price.
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="pricePerRequest">Price Per Request</label>
+                                <input type="number" class="form-control" th:field="*{pricePerRequest}" step="0.000001">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('pricePerRequest')}" th:errors="*{pricePerRequest}">
+                                    Please provide a valid price per request.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-end">
+                <button type="submit" class="btn btn-primary">Save AI Model</button>
+                <a th:href="@{/aimodels}" class="btn btn-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </section>
+
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html> 
