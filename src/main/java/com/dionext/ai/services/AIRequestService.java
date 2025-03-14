@@ -4,18 +4,28 @@ import com.dionext.ai.entity.*;
 import com.dionext.ai.repositories.AiModelRepository;
 import com.dionext.ai.repositories.AiPromptRepository;
 import com.dionext.ai.repositories.AiRequestRepository;
+import com.dionext.ai.utils.ModelJsonUtils;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.List;
 
 @Service
 public class AIRequestService {
+    private static final Logger logger = LoggerFactory.getLogger(AIRequestService.class);
+    
     @Autowired
     private AiModelRepository aiModelRepository;
     @Autowired
@@ -49,162 +59,39 @@ public class AIRequestService {
     @PostConstruct
     void postConstruct() {
         List<AiModel> aiModels = aiModelRepository.findAll();
-        if (aiModels.size() == 0) {
-            //1
-            AiModel aiModel = new AiModel();
-            aiModel.setId(1L);
-            aiModel.setChatClientBean("chatClientPerplexity");
-            aiModel.setLaunchType(AiLaunchType.BROKER);
-            aiModel.setProvider("LLaMA");//LLaMA (Large Language Model Meta AI)
-            aiModel.setProviderUrl("https://www.llama.com/");
-            aiModel.setBroker("Perplexity");
-            aiModel.setBrokerUrl("https://www.perplexity.ai");
-            aiModel.setModel("llama-3.1-sonar-small-128k-online");//These models will be deprecated and will no longer be available to use after 2/22/2025
-            aiModel.setModelUrl("https://www.llama.com/docs/model-cards-and-prompt-formats/llama3_1/");
-            aiModel.setPricePerRequest(BigDecimal.valueOf(0.005));
-            aiModel.setPricePer1MAll(BigDecimal.valueOf(0.2));
-            aiModelRepository.save(aiModel);
-
-            //2
-            aiModel = new AiModel();
-            aiModel.setId(2L);
-            aiModel.setChatClientBean("chatClientOllama");
-            aiModel.setProvider("Mistral");
-            aiModel.setProviderUrl("https://mistral.ai");
-            aiModel.setModel("mistral");
-            aiModel.setModelUrl("https://mistral.ai/en/models");
-            aiModel.setBroker("Ollama");
-            aiModel.setBrokerUrl("https://ollama.com");
-            aiModel.setLaunchType(AiLaunchType.LOCAL);
-            aiModel.setPricePerRequest(BigDecimal.valueOf(0));
-            aiModel.setPricePer1MAll(BigDecimal.valueOf(0));
-            aiModelRepository.save(aiModel);
-
-            //OpenAI  You can select between models such as: gpt-4o, gpt-4o-mini, gpt-4-turbo, gpt-3.5-turbo, and more.
-            //3
-            aiModel = new AiModel();
-            aiModel.setId(3L);
-            aiModel.setChatClientBean("chatClientOpenAi");
-            aiModel.setProvider("OpenAi");
-            aiModel.setProviderUrl("https://openai.com/");
-            aiModel.setModel("gpt-4o");
-            aiModel.setModelUrl("https://openai.com/index/gpt-4o-system-card/");
-            aiModel.setLaunchType(AiLaunchType.PROVIDER);
-            aiModel.setPricePer1MInput(BigDecimal.valueOf(2.5));//Cached input: $1.25 / 1M tokens
-            aiModel.setPricePer1MOutput(BigDecimal.valueOf(10.0));
-            aiModelRepository.save(aiModel);
-
-            //4
-            aiModel = new AiModel();
-            aiModel.setId(4L);
-            aiModel.setChatClientBean("chatClientOpenAi");
-            aiModel.setProvider("OpenAi");
-            aiModel.setProviderUrl("https://openai.com/");
-            aiModel.setModel("gpt-4o-mini");
-            aiModel.setModelUrl("https://openai.com/index/gpt-4o-mini-advancing-cost-efficient-intelligence/");
-            aiModel.setLaunchType(AiLaunchType.PROVIDER);
-            aiModel.setPricePer1MInput(BigDecimal.valueOf(0.150));//Cached input: $0.075 / 1M tokens
-            aiModel.setPricePer1MOutput(BigDecimal.valueOf(0.600));
-            aiModelRepository.save(aiModel);
-
-            //5
-            aiModel = new AiModel();
-            aiModel.setId(5L);
-            aiModel.setChatClientBean("chatClientPerplexity");
-            aiModel.setLaunchType(AiLaunchType.BROKER);
-            aiModel.setProvider("LLaMA");//LLaMA (Large Language Model Meta AI)
-            aiModel.setProviderUrl("https://www.llama.com/");
-            aiModel.setBroker("Perplexity");
-            aiModel.setBrokerUrl("https://www.perplexity.ai");
-            aiModel.setModel("sonar");//Команда создала Sonar на основе модели Meta Llama 3.3 70B, доработав её с помощью дополнительного обучения для улучшения поисковых возможностей. Э
-            aiModel.setModelUrl("https://www.llama.com/docs/model-cards-and-prompt-formats/llama3_3/");
-            aiModel.setPricePerRequest(BigDecimal.valueOf(0.005));
-            aiModel.setPricePer1MInput(BigDecimal.valueOf(1.0));
-            aiModel.setPricePer1MOutput(BigDecimal.valueOf(1.0));
-            aiModelRepository.save(aiModel);
-
-            //6
-            aiModel = new AiModel();
-            aiModel.setId(6L);
-            aiModel.setChatClientBean("chatClientPerplexity");
-            aiModel.setLaunchType(AiLaunchType.BROKER);
-            aiModel.setProvider("LLaMA");//LLaMA (Large Language Model Meta AI)
-            aiModel.setProviderUrl("https://www.llama.com/");
-            aiModel.setBroker("Perplexity");
-            aiModel.setBrokerUrl("https://www.perplexity.ai");
-            aiModel.setModel("sonar-pro");//Команда создала Sonar на основе модели Meta Llama 3.3 70B, доработав её с помощью дополнительного обучения для улучшения поисковых возможностей. Э
-            aiModel.setModelUrl("https://www.llama.com/docs/model-cards-and-prompt-formats/llama3_3/");
-            aiModel.setPricePerRequest(BigDecimal.valueOf(0.005));
-            aiModel.setPricePer1MInput(BigDecimal.valueOf(3.0));
-            aiModel.setPricePer1MOutput(BigDecimal.valueOf(15.0));
-            aiModelRepository.save(aiModel);
-
-            //7
-            aiModel = new AiModel();
-            aiModel.setId(7L);
-            aiModel.setChatClientBean("chatClientPerplexity");
-            aiModel.setLaunchType(AiLaunchType.BROKER);
-            aiModel.setProvider("LLaMA");//LLaMA (Large Language Model Meta AI)
-            aiModel.setProviderUrl("https://www.llama.com/");
-            aiModel.setBroker("Perplexity");
-            aiModel.setBrokerUrl("https://www.perplexity.ai");
-            aiModel.setModel("sonar-reasoning");//Команда создала Sonar на основе модели Meta Llama 3.3 70B, доработав её с помощью дополнительного обучения для улучшения поисковых возможностей. Э
-            aiModel.setModelUrl("https://www.llama.com/docs/model-cards-and-prompt-formats/llama3_3/");
-            aiModel.setPricePerRequest(BigDecimal.valueOf(0.005));
-            aiModel.setPricePer1MInput(BigDecimal.valueOf(1.0));
-            aiModel.setPricePer1MOutput(BigDecimal.valueOf(5.0));
-            aiModelRepository.save(aiModel);
-
-            //8
-            aiModel = new AiModel();
-            aiModel.setId(8L);
-            aiModel.setChatClientBean("chatClientPerplexity");
-            aiModel.setLaunchType(AiLaunchType.BROKER);
-            aiModel.setProvider("LLaMA");//LLaMA (Large Language Model Meta AI)
-            aiModel.setProviderUrl("https://www.llama.com/");
-            aiModel.setBroker("Perplexity");
-            aiModel.setBrokerUrl("https://www.perplexity.ai");
-            aiModel.setModel("sonar-reasoning-pro");//Команда создала Sonar на основе модели Meta Llama 3.3 70B, доработав её с помощью дополнительного обучения для улучшения поисковых возможностей. Э
-            aiModel.setModelUrl("https://www.llama.com/docs/model-cards-and-prompt-formats/llama3_3/");
-            aiModel.setPricePerRequest(BigDecimal.valueOf(0.005));
-            aiModel.setPricePer1MInput(BigDecimal.valueOf(2.0));
-            aiModel.setPricePer1MOutput(BigDecimal.valueOf(8.0));
-            aiModelRepository.save(aiModel);
-
-            //9
-            //"The model `o3-mini` does not exist or you do not have access to it.",
-            //Update: You now have access to OpenAI o1 and OpenAI o3-mini in the API.
-            //https://platform.openai.com/docs/guides/rate-limits
-            aiModel = new AiModel();
-            aiModel.setId(9L);
-            aiModel.setChatClientBean("chatClientOpenAi");
-            aiModel.setProvider("OpenAi");
-            aiModel.setProviderUrl("https://openai.com/");
-            aiModel.setModel("o3-mini");
-            aiModel.setModelUrl("https://openai.com/index/openai-o3-mini/");
-            aiModel.setLaunchType(AiLaunchType.PROVIDER);
-            aiModel.setPricePer1MInput(BigDecimal.valueOf(1.1));//Cached input: $0.075 / 1M tokens
-            aiModel.setPricePer1MOutput(BigDecimal.valueOf(4.4));
-            aiModelRepository.save(aiModel);
-
-            //10
-            //TODO "Unsupported value: 'messages[0].role' does not support 'system' with this model.",
-            //после удаления system message
-            //I/O error on POST request for "https://api.openai.com/v1/chat/completions": null
-            aiModel = new AiModel();
-            aiModel.setId(10L);
-            aiModel.setChatClientBean("chatClientOpenAi");
-            aiModel.setProvider("OpenAi");
-            aiModel.setProviderUrl("https://openai.com/");
-            aiModel.setModel("o1-mini");
-            aiModel.setModelUrl("https://openai.com/index/openai-o1-mini-advancing-cost-efficient-reasoning/");
-            aiModel.setLaunchType(AiLaunchType.PROVIDER);
-            aiModel.setPricePer1MInput(BigDecimal.valueOf(1.1));//Cached input: $0.075 / 1M tokens
-            aiModel.setPricePer1MOutput(BigDecimal.valueOf(4.4));
-            aiModelRepository.save(aiModel);
-
+        if (aiModels.isEmpty()) {
+            try {
+                // Load models from JSON file using the utility class
+                List<AiModel> modelsFromJson = ModelJsonUtils.loadModelsFromJson();
+                
+                logger.info("Loaded {} AI models from model.json", modelsFromJson.size());
+                
+                // Save all models to the database
+                for (AiModel model : modelsFromJson) {
+                    // Convert primitive numeric types to BigDecimal if needed
+                    /*
+                    if (model.getPricePerRequest() != null && !(model.getPricePerRequest() instanceof BigDecimal)) {
+                        model.setPricePerRequest(BigDecimal.valueOf(model.getPricePerRequest().doubleValue()));
+                    }
+                    if (model.getPricePer1MAll() != null && !(model.getPricePer1MAll() instanceof BigDecimal)) {
+                        model.setPricePer1MAll(BigDecimal.valueOf(model.getPricePer1MAll().doubleValue()));
+                    }
+                    if (model.getPricePer1MInput() != null && !(model.getPricePer1MInput() instanceof BigDecimal)) {
+                        model.setPricePer1MInput(BigDecimal.valueOf(model.getPricePer1MInput().doubleValue()));
+                    }
+                    if (model.getPricePer1MOutput() != null && !(model.getPricePer1MOutput() instanceof BigDecimal)) {
+                        model.setPricePer1MOutput(BigDecimal.valueOf(model.getPricePer1MOutput().doubleValue()));
+                    }
+                     */
+                    
+                    aiModelRepository.save(model);
+                    logger.info("Saved AI model: {} - {}", model.getProvider(), model.getModel());
+                }
+            } catch (IOException e) {
+                logger.error("Failed to load AI models from model.json", e);
+                // Fallback to creating a default model if JSON loading fails
+            }
         }
-
     }
     public Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariant(String externalDomain, String externalEntity, String externalVariant) {
         return aiRequestRepository.findByExternalDomainAndExternalEntityAndExternalVariant(

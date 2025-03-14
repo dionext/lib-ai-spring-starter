@@ -12,10 +12,13 @@ import org.springframework.data.repository.query.Param;
 import java.util.Collection;
 
 public interface AiRequestRepository extends JpaRepository<AiRequest, Long> {
+    //all requests
     Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariant(
             String externalDomain, String externalEntity, String externalVariant);
+    //all requests for entity
     Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariantAndExternalId(
             String externalDomain, String externalEntity, String externalVariant, String externalId);
+    //request for entity with specific model and prompt
     Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariantAndExternalIdAndAiModelAndAiPrompt(
             String externalDomain, String externalEntity, String externalVariant, String externalId, AiModel aiModel, AiPrompt aiPrompt);
     
@@ -26,14 +29,14 @@ public interface AiRequestRepository extends JpaRepository<AiRequest, Long> {
     Collection<AiRequest> findByExternalDomainAndExternalEntityAndExternalVariantAndExternalIdAndAiModelIdAndAiPromptId(
             String externalDomain, String externalEntity, String externalVariant, String externalId, Long aiModelId, Long aiPromptId);
             
-    @Query("SELECT r FROM AiRequest r WHERE " +
-           "(:search IS NULL OR CAST(r.id AS string) LIKE %:search% OR " +
-           "COALESCE(r.systemPrompt, '') LIKE %:search% OR " +
-           "COALESCE(r.userPrompt, '') LIKE %:search% OR " +
-           "COALESCE(r.result, '') LIKE %:search% OR " +
-           "COALESCE(r.externalDomain, '') LIKE %:search% OR " +
-           "COALESCE(r.externalEntity, '') LIKE %:search% OR " +
-           "COALESCE(r.externalVariant, '') LIKE %:search% OR " +
-           "COALESCE(r.externalId, '') LIKE %:search%)")
+    @Query("SELECT r FROM AiRequest r WHERE (:search IS NULL OR " +
+            "CAST(r.id AS string) LIKE %:search% OR " +
+            "COALESCE(r.systemPrompt, '') LIKE %:search% OR " +
+            "COALESCE(r.userPrompt, '') LIKE %:search% OR " +
+            "COALESCE(r.result, '') LIKE %:search% OR " +
+            "COALESCE(r.externalDomain, '') LIKE %:search% OR " +
+            "COALESCE(r.externalEntity, '') LIKE %:search% OR " +
+            "COALESCE(r.externalVariant, '') LIKE %:search% OR " +
+            "COALESCE(r.externalId, '') LIKE %:search%)")
     Page<AiRequest> findBySearchTerm(@Param("search") String search, Pageable pageable);
 }

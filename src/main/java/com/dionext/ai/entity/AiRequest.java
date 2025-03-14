@@ -11,17 +11,21 @@ import java.time.LocalDateTime;
 @Setter
 @Entity
 @Table(name = "airequest")
+//Error executing DDL "create index mulitIndex1 on airequest (external_domain, external_entity, external_variant, external_id, ai_model_id, ai_prompt_id)" via JDBC [(conn=667) Specified key was too long; max key length is 3072 bytes]
+//    , indexes = {
+//    @Index(name = "mulitIndex1", columnList = "externalDomain, externalEntity, externalVariant, externalId, ai_model_id, ai_prompt_id"),
+//})
 public class AiRequest {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "aiModelId")
+    @JoinColumn(name = "ai_model_id")
     private AiModel aiModel;
 
     @ManyToOne
-    @JoinColumn(name = "aiPromptId")
+    @JoinColumn(name = "ai_prompt_id")
     private AiPrompt aiPrompt;
 
     private String externalDomain;
