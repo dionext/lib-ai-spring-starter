@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout/main :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>View AI Prompt - DioNext Admin</title>
+</head>
+<body>
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>View AI Prompt <span class="text-muted" th:text="${'#' + aiPrompt.id}"></span></h2>
+            <div>
+                <a th:href="@{/aiprompts/{id}/edit(id=${aiPrompt.id})}" class="btn btn-primary">Edit</a>
+                <a th:href="@{/aiprompts}" class="btn btn-outline-secondary ms-2">Back to List</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Prompt Information -->
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Prompt Information</div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 15%">ID:</th>
+                                <td th:text="${aiPrompt.id}">1</td>
+                            </tr>
+                            <tr>
+                                <th>Name:</th>
+                                <td th:text="${aiPrompt.name}">Sample Prompt</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- System Prompt -->
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">System Prompt Template</div>
+                    <div class="card-body">
+                        <pre class="bg-light p-3 rounded" style="white-space: pre-wrap;" th:text="${aiPrompt.systemPromptTempl}">You are a helpful assistant.</pre>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Prompt -->
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">User Prompt Template</div>
+                    <div class="card-body">
+                        <pre class="bg-light p-3 rounded" style="white-space: pre-wrap;" th:text="${aiPrompt.userPromptTempl}">Please provide information about the following topic: {{topic}}</pre>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+</html> 

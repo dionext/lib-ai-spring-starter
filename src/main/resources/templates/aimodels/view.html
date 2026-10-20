@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout/main :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>View AI Model - DioNext Admin</title>
+</head>
+<body>
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>View AI Model <span class="text-muted" th:text="${'#' + aiModel.id}"></span></h2>
+            <div>
+                <a th:href="@{/aimodels/{id}/edit(id=${aiModel.id})}" class="btn btn-primary">Edit</a>
+                <a th:href="@{/aimodels}" class="btn btn-outline-secondary ms-2">Back to List</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Model Information -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Model Information</div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 30%">ID:</th>
+                                <td th:text="${aiModel.id}">1</td>
+                            </tr>
+                            <tr>
+                                <th>Provider:</th>
+                                <td th:text="${aiModel.provider}">OpenAI</td>
+                            </tr>
+                            <tr>
+                                <th>Model:</th>
+                                <td th:text="${aiModel.model}">gpt-4</td>
+                            </tr>
+                            <tr>
+                                <th>Launch Type:</th>
+                                <td th:text="${aiModel.launchType}">PROVIDER</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pricing Information -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Pricing Information</div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 30%">Price (Input):</th>
+                                <td th:text="${#numbers.formatDecimal(aiModel.pricePer1MInput, 1, 6) + ' USD per 1M tokens'}">0.000000 USD per 1M tokens</td>
+                            </tr>
+                            <tr>
+                                <th>Price (Output):</th>
+                                <td th:text="${#numbers.formatDecimal(aiModel.pricePer1MOutput, 1, 6) + ' USD per 1M tokens'}">0.000000 USD per 1M tokens</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+</body>
+</html> 

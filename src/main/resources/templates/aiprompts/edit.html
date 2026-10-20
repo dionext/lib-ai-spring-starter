@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout/main :: layout(~{::title}, ~{::section})}">
+<head>
+    <title th:text="${aiPrompt.id == null ? 'Create AI Prompt' : 'Edit AI Prompt'} + ' - DioNext Admin'">Create/Edit AI Prompt</title>
+</head>
+<body>
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 th:text="${aiPrompt.id == null ? 'Create AI Prompt' : 'Edit AI Prompt'}">Create/Edit AI Prompt</h2>
+            <a th:href="@{/aiprompts}" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+
+        <form th:action="@{/aiprompts}" th:object="${aiPrompt}" method="post" class="needs-validation" novalidate>
+            <input type="hidden" th:field="*{id}" />
+            
+            <div class="row">
+                <!-- Basic Information -->
+                <div class="col-md-12">
+                    <div class="card mb-4">
+                        <div class="card-header">Basic Information</div>
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label for="name">Prompt Name</label>
+                                <input type="text" class="form-control" th:field="*{name}" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                                    Please provide a valid prompt name.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- System Prompt Template -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">System Prompt Template</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <textarea class="form-control" th:field="*{systemPromptTempl}" rows="10" 
+                                          placeholder="Enter system prompt template here..."></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('systemPromptTempl')}" th:errors="*{systemPromptTempl}">
+                                    Please provide a valid system prompt template.
+                                </div>
+                                <small class="form-text text-muted">
+                                    The system prompt sets the behavior of the AI assistant.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- User Prompt Template -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">User Prompt Template</div>
+                        <div class="card-body">
+                            <div class="form-group">
+                                <textarea class="form-control" th:field="*{userPromptTempl}" rows="10" 
+                                          placeholder="Enter user prompt template here..."></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('userPromptTempl')}" th:errors="*{userPromptTempl}">
+                                    Please provide a valid user prompt template.
+                                </div>
+                                <small class="form-text text-muted">
+                                    The user prompt template is what will be sent to the AI model. You can use variables like {input} that will be replaced with actual values.
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-end">
+                <button type="submit" class="btn btn-primary">Save AI Prompt</button>
+                <a th:href="@{/aiprompts}" class="btn btn-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </section>
+
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html> 

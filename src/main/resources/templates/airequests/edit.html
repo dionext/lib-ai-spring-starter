@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout/main :: layout(~{::title}, ~{::section})}">
+<head>
+    <title th:text="${aiRequest.id == null ? 'Create AI Request' : 'Edit AI Request'} + ' - DioNext Admin'">Create/Edit AI Request</title>
+</head>
+<body>
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 th:text="${aiRequest.id == null ? 'Create AI Request' : 'Edit AI Request'}">Create/Edit AI Request</h2>
+            <a th:href="@{/airequests}" class="btn btn-outline-secondary">Back to List</a>
+        </div>
+
+        <form th:action="@{/airequests}" th:object="${aiRequest}" method="post" class="needs-validation" novalidate>
+            <input type="hidden" th:field="*{id}" />
+            
+            <div class="row">
+                <!-- Model and Prompt Selection -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">Model and Prompt</div>
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label for="aiModel">AI Model</label>
+                                <select class="form-control" th:field="*{aiModel.id}">
+                                    <option value="">-- Select Model --</option>
+                                    <option th:each="model : ${aiModels}" 
+                                            th:value="${model.id}" 
+                                            th:text="${model.provider + ' - ' + model.model}">OpenAI - GPT-4</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('aiModel')}" th:errors="*{aiModel}">
+                                    Please select a valid model.
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="aiPrompt">AI Prompt</label>
+                                <select class="form-control" th:field="*{aiPrompt.id}">
+                                    <option value="">-- Select Prompt --</option>
+                                    <option th:each="prompt : ${aiPrompts}" 
+                                            th:value="${prompt.id}" 
+                                            th:text="${prompt.name}">Sample Prompt</option>
+                                </select>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('aiPrompt')}" th:errors="*{aiPrompt}">
+                                    Please select a valid prompt.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- External Reference Information -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">External Reference</div>
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label for="externalDomain">External Domain</label>
+                                <input type="text" class="form-control" th:field="*{externalDomain}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('externalDomain')}" th:errors="*{externalDomain}">
+                                    Please provide a valid external domain.
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="externalEntity">External Entity</label>
+                                <input type="text" class="form-control" th:field="*{externalEntity}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('externalEntity')}" th:errors="*{externalEntity}">
+                                    Please provide a valid external entity.
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="externalVariant">External Variant</label>
+                                <input type="text" class="form-control" th:field="*{externalVariant}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('externalVariant')}" th:errors="*{externalVariant}">
+                                    Please provide a valid external variant.
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="externalId">External ID</label>
+                                <input type="text" class="form-control" th:field="*{externalId}">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('externalId')}" th:errors="*{externalId}">
+                                    Please provide a valid external ID.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Prompt Content -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">Prompt Content</div>
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label for="systemPrompt">System Prompt</label>
+                                <textarea class="form-control" th:field="*{systemPrompt}" rows="5" 
+                                          placeholder="Enter system prompt here..."></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('systemPrompt')}" th:errors="*{systemPrompt}">
+                                    Please provide a valid system prompt.
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="userPrompt">User Prompt</label>
+                                <textarea class="form-control" th:field="*{userPrompt}" rows="5" 
+                                          placeholder="Enter user prompt here..."></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('userPrompt')}" th:errors="*{userPrompt}">
+                                    Please provide a valid user prompt.
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="temperature">Temperature</label>
+                                <input type="number" class="form-control" th:field="*{temperature}" step="0.01" min="0" max="2">
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('temperature')}" th:errors="*{temperature}">
+                                    Please provide a valid temperature (0-2).
+                                </div>
+                                <small class="form-text text-muted">
+                                    Controls randomness: Lower values are more deterministic, higher values more creative (0-2).
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Result and Metrics -->
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <div class="card-header">Result and Metrics</div>
+                        <div class="card-body">
+                            <div class="form-group mb-3">
+                                <label for="result">Result</label>
+                                <textarea class="form-control" th:field="*{result}" rows="8" 
+                                          placeholder="AI response will appear here..."></textarea>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('result')}" th:errors="*{result}">
+                                    Please provide a valid result.
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="promptTokens">Prompt Tokens</label>
+                                        <input type="number" class="form-control" th:field="*{promptTokens}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="completionTokens">Completion Tokens</label>
+                                        <input type="number" class="form-control" th:field="*{completionTokens}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="totalTokens">Total Tokens</label>
+                                        <input type="number" class="form-control" th:field="*{totalTokens}">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-3">
+                                        <label for="cost">Cost</label>
+                                        <input type="number" class="form-control" th:field="*{cost}" step="0.000001">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="duration">Duration (ms)</label>
+                                <input type="number" class="form-control" th:field="*{duration}">
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label for="dateTime">Date/Time</label>
+                                <input type="datetime-local" class="form-control" th:field="*{dateTime}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group text-end">
+                <button type="submit" class="btn btn-primary">Save AI Request</button>
+                <a th:href="@{/airequests}" class="btn btn-secondary ms-2">Cancel</a>
+            </div>
+        </form>
+    </section>
+
+    <script>
+        // Form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html> 

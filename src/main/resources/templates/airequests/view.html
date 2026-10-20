@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" 
+      th:replace="~{layout/main :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>View AI Request - DioNext Admin</title>
+</head>
+<body>
+    <section>
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2>View AI Request <span class="text-muted" th:text="${'#' + aiRequest.id}"></span></h2>
+            <div>
+                <a th:href="@{/airequests/{id}/edit(id=${aiRequest.id})}" class="btn btn-primary">Edit</a>
+                <a th:href="@{/airequests}" class="btn btn-outline-secondary ms-2">Back to List</a>
+            </div>
+        </div>
+
+        <div class="row">
+            <!-- Request Information -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Request Information</div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 30%">ID:</th>
+                                <td th:text="${aiRequest.id}">1</td>
+                            </tr>
+                            <tr>
+                                <th>Date/Time:</th>
+                                <td th:text="${#temporals.format(aiRequest.dateTime, 'yyyy-MM-dd HH:mm:ss')}">2023-01-01 12:00:00</td>
+                            </tr>
+                            <tr>
+                                <th>Duration:</th>
+                                <td th:text="${aiRequest.duration + ' ms'}">1000 ms</td>
+                            </tr>
+                            <tr>
+                                <th>Model:</th>
+                                <td th:if="${aiRequest.aiModel != null}" th:text="${aiRequest.aiModel.provider + ' - ' + aiRequest.aiModel.model}">OpenAI - GPT-4</td>
+                                <td th:unless="${aiRequest.aiModel != null}">N/A</td>
+                            </tr>
+                            <tr>
+                                <th>Prompt:</th>
+                                <td th:if="${aiRequest.aiPrompt != null}" th:text="${aiRequest.aiPrompt.name}">Sample Prompt</td>
+                                <td th:unless="${aiRequest.aiPrompt != null}">N/A</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Metrics -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Metrics</div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 30%">Prompt Tokens:</th>
+                                <td th:text="${aiRequest.promptTokens}">100</td>
+                            </tr>
+                            <tr>
+                                <th>Completion Tokens:</th>
+                                <td th:text="${aiRequest.completionTokens}">200</td>
+                            </tr>
+                            <tr>
+                                <th>Total Tokens:</th>
+                                <td th:text="${aiRequest.totalTokens}">300</td>
+                            </tr>
+                            <tr>
+                                <th>Cost:</th>
+                                <td th:text="${#numbers.formatDecimal(aiRequest.cost, 1, 6) + ' USD'}">0.000123 USD</td>
+                            </tr>
+                            <tr>
+                                <th>Temperature:</th>
+                                <td th:text="${aiRequest.temperature}">0.7</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- External Reference -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">External Reference</div>
+                    <div class="card-body">
+                        <table class="table table-borderless">
+                            <tr>
+                                <th style="width: 30%">Domain:</th>
+                                <td th:text="${aiRequest.externalDomain}">app</td>
+                            </tr>
+                            <tr>
+                                <th>Entity:</th>
+                                <td th:text="${aiRequest.externalEntity}">user</td>
+                            </tr>
+                            <tr>
+                                <th>Variant:</th>
+                                <td th:text="${aiRequest.externalVariant}">profile</td>
+                            </tr>
+                            <tr>
+                                <th>ID:</th>
+                                <td th:text="${aiRequest.externalId}">12345</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prompt Content -->
+            <div class="col-md-6">
+                <div class="card mb-4">
+                    <div class="card-header">Prompt Content</div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <h6>System Prompt:</h6>
+                            <pre class="bg-light p-3 rounded" th:text="${aiRequest.systemPrompt}">You are a helpful assistant.</pre>
+                        </div>
+                        <div>
+                            <h6>User Prompt:</h6>
+                            <pre class="bg-light p-3 rounded" th:text="${aiRequest.userPrompt}">Tell me about AI.</pre>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result -->
+            <div class="col-md-12">
+                <div class="card mb-4">
+                    <div class="card-header">Result</div>
+                    <div class="card-body">
+                        <pre class="bg-light p-3 rounded" style="white-space: pre-wrap;" th:text="${aiRequest.result}">AI response text here...</pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+</html> 
